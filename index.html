@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Worker Pass — Imago Mall</title>
+  <title>Worker Pass — BH Builder</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #f4f5f7;
@@ -17,347 +16,124 @@
       justify-content: flex-start;
       padding: 24px 16px 40px;
     }
-
     .header {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      width: 100%; max-width: 480px;
+      display: flex; align-items: center; gap: 10px;
       margin-bottom: 20px;
     }
-
     .header-logo {
-      width: 36px;
-      height: 36px;
-      background: #1a3a5c;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      flex-shrink: 0;
+      width: 36px; height: 36px; background: #1a3a5c;
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; color: white; font-size: 14px;
+      font-weight: 700; flex-shrink: 0;
     }
-
-    .header-text p:first-child {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a3a5c;
-    }
-
-    .header-text p:last-child {
-      font-size: 11px;
-      color: #888;
-    }
-
-    /* Loading state */
+    .header-text p:first-child { font-size: 14px; font-weight: 600; color: #1a3a5c; }
+    .header-text p:last-child { font-size: 11px; color: #888; }
     .loading-card {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 16px;
-      padding: 40px 24px;
-      text-align: center;
+      width: 100%; max-width: 480px; background: white;
+      border-radius: 16px; padding: 40px 24px; text-align: center;
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-
     .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid #e8eaf0;
-      border-top-color: #1a3a5c;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
+      width: 36px; height: 36px; border: 3px solid #e8eaf0;
+      border-top-color: #1a3a5c; border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 16px;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-card p {
-      font-size: 14px;
-      color: #888;
-    }
-
-    /* Valid pass card */
+    .loading-card p { font-size: 14px; color: #888; }
     .pass-card {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      display: none;
+      width: 100%; max-width: 480px; background: white;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: none;
     }
-
     .pass-card-header {
-      background: #1a3a5c;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      background: #1a3a5c; padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
     }
-
     .pass-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 600; color: white; flex-shrink: 0;
     }
-
-    .pass-header-info p:first-child {
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-    }
-
-    .pass-header-info p:last-child {
-      font-size: 12px;
-      color: rgba(255,255,255,0.65);
-      margin-top: 2px;
-    }
-
+    .pass-header-info p:first-child { font-size: 16px; font-weight: 600; color: white; }
+    .pass-header-info p:last-child { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
     .valid-banner {
-      background: #eafaf3;
-      border-bottom: 1px solid #c3eedd;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      background: #eafaf3; border-bottom: 1px solid #c3eedd;
+      padding: 10px 20px; display: flex; align-items: center; gap: 8px;
     }
-
     .valid-dot {
-      width: 8px;
-      height: 8px;
-      background: #22c27a;
-      border-radius: 50%;
-      flex-shrink: 0;
+      width: 8px; height: 8px; background: #22c27a;
+      border-radius: 50%; flex-shrink: 0;
       animation: pulse 1.5s ease-in-out infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .valid-banner span {
-      font-size: 13px;
-      font-weight: 600;
-      color: #0f7a4a;
-    }
-
-    .valid-banner .scan-time {
-      font-size: 11px;
-      color: #888;
-      margin-left: auto;
-    }
-
-    .pass-body {
-      padding: 20px;
-    }
-
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .valid-banner span { font-size: 13px; font-weight: 600; color: #0f7a4a; }
+    .valid-banner .scan-time { font-size: 11px; color: #888; margin-left: auto; }
+    .pass-body { padding: 20px; }
     .section-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: #aaa;
-      margin-bottom: 10px;
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.07em; color: #aaa; margin-bottom: 10px;
     }
-
     .field-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 8px 0;
-      border-bottom: 1px solid #f0f1f4;
-      gap: 12px;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; padding: 8px 0;
+      border-bottom: 1px solid #f0f1f4; gap: 12px;
     }
-
     .field-row:last-child { border-bottom: none; }
-
-    .field-label {
-      font-size: 12px;
-      color: #888;
-      flex-shrink: 0;
-    }
-
-    .field-value {
-      font-size: 13px;
-      font-weight: 500;
-      color: #1a1a2e;
-      text-align: right;
-    }
-
-    .divider {
-      height: 1px;
-      background: #f0f1f4;
-      margin: 4px 0 16px;
-    }
-
+    .field-label { font-size: 12px; color: #888; flex-shrink: 0; }
+    .field-value { font-size: 13px; font-weight: 500; color: #1a1a2e; text-align: right; }
+    .divider { height: 1px; background: #f0f1f4; margin: 4px 0 16px; }
     .permit-badge {
-      background: #f0f4ff;
-      border: 1px solid #c7d4f5;
-      border-radius: 8px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #f0f4ff; border: 1px solid #c7d4f5;
+      border-radius: 8px; padding: 10px 14px;
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 16px;
     }
-
-    .permit-badge p:first-child {
-      font-size: 10px;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .permit-badge p:last-child {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a3a5c;
-      font-family: monospace;
-      margin-top: 2px;
-    }
-
-    .validity-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .validity-box {
-      flex: 1;
-      background: #f8f9fb;
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
-
-    .validity-box p:first-child {
-      font-size: 10px;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 3px;
-    }
-
-    .validity-box p:last-child {
-      font-size: 13px;
-      font-weight: 500;
-      color: #1a1a2e;
-    }
-
+    .permit-badge p:first-child { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+    .permit-badge p:last-child { font-size: 15px; font-weight: 600; color: #1a3a5c; font-family: monospace; margin-top: 2px; }
+    .validity-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    .validity-box { flex: 1; background: #f8f9fb; border-radius: 8px; padding: 10px 12px; }
+    .validity-box p:first-child { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .validity-box p:last-child { font-size: 13px; font-weight: 500; color: #1a1a2e; }
     .staff-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      background: #e8f0fe;
-      color: #1a3a5c;
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; background: #e8f0fe; color: #1a3a5c;
     }
-
     .pass-footer {
-      background: #f8f9fb;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #f8f9fb; padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .pass-footer p {
-      font-size: 11px;
-      color: #bbb;
-    }
-
-    /* Denied card */
+    .pass-footer p { font-size: 11px; color: #bbb; }
     .denied-card {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      display: none;
+      width: 100%; max-width: 480px; background: white;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: none;
     }
-
-    .denied-header {
-      background: #c0392b;
-      padding: 24px 20px;
-      text-align: center;
-    }
-
+    .denied-header { background: #c0392b; padding: 24px 20px; text-align: center; }
     .denied-icon {
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 12px;
-      font-size: 22px;
+      width: 52px; height: 52px; background: rgba(255,255,255,0.15);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 12px; font-size: 22px;
     }
-
-    .denied-header p:first-of-type {
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-    }
-
-    .denied-header p:last-of-type {
-      font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      margin-top: 4px;
-    }
-
-    .denied-body {
-      padding: 20px;
-    }
-
-    .denied-body p {
-      font-size: 13px;
-      color: #555;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    /* Error card */
+    .denied-header p:first-of-type { font-size: 18px; font-weight: 700; color: white; }
+    .denied-header p:last-of-type { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+    .denied-body { padding: 20px; }
+    .denied-body p { font-size: 13px; color: #555; line-height: 1.6; text-align: center; }
     .error-card {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 16px;
-      padding: 32px 24px;
-      text-align: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      display: none;
+      width: 100%; max-width: 480px; background: white;
+      border-radius: 16px; padding: 32px 24px; text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: none;
     }
-
-    .error-card p:first-child {
-      font-size: 28px;
-      margin-bottom: 12px;
-    }
-
-    .error-card p:nth-child(2) {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 6px;
-    }
-
-    .error-card p:last-child {
-      font-size: 13px;
-      color: #888;
+    .error-card p:first-child { font-size: 28px; margin-bottom: 12px; }
+    .error-card p:nth-child(2) { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+    .error-card p:last-child { font-size: 13px; color: #888; }
+    /* Debug box - only shown on error */
+    .debug-box {
+      width: 100%; max-width: 480px; background: #fff8e1;
+      border: 1px solid #ffe082; border-radius: 8px;
+      padding: 12px 16px; margin-top: 12px; display: none;
+      font-size: 11px; color: #555; word-break: break-all; line-height: 1.6;
     }
   </style>
 </head>
@@ -366,18 +142,16 @@
   <div class="header">
     <div class="header-logo">BH</div>
     <div class="header-text">
-      <p>Imago Mall</p>
+      <p>BH Builder Sdn Bhd</p>
       <p>Worker Pass Verification</p>
     </div>
   </div>
 
-  <!-- Loading -->
   <div class="loading-card" id="loading">
     <div class="spinner"></div>
     <p>Verifying worker pass...</p>
   </div>
 
-  <!-- Valid pass -->
   <div class="pass-card" id="pass-card">
     <div class="pass-card-header">
       <div class="pass-avatar" id="avatar-initials">--</div>
@@ -399,7 +173,6 @@
         </div>
         <span class="staff-badge" id="staff-type">—</span>
       </div>
-
       <div class="validity-row">
         <div class="validity-box">
           <p>Project start</p>
@@ -410,7 +183,6 @@
           <p id="project-end">—</p>
         </div>
       </div>
-
       <p class="section-label">Work details</p>
       <div class="field-row">
         <span class="field-label">Trade</span>
@@ -424,9 +196,7 @@
         <span class="field-label">Location</span>
         <span class="field-value" id="shop-lot">—</span>
       </div>
-
       <div class="divider"></div>
-
       <p class="section-label">Person in charge</p>
       <div class="field-row">
         <span class="field-label">Name</span>
@@ -436,9 +206,7 @@
         <span class="field-label">Contact</span>
         <span class="field-value" id="contact-no">—</span>
       </div>
-
       <div class="divider"></div>
-
       <p class="section-label">Worker</p>
       <div class="field-row">
         <span class="field-label">Full name</span>
@@ -450,12 +218,11 @@
       </div>
     </div>
     <div class="pass-footer">
-      <p>Imago Mall — Security Verification</p>
+      <p>BH Builder — Security Verification</p>
       <p id="footer-date"></p>
     </div>
   </div>
 
-  <!-- Access denied -->
   <div class="denied-card" id="denied-card">
     <div class="denied-header">
       <div class="denied-icon">🚫</div>
@@ -467,16 +234,18 @@
     </div>
   </div>
 
-  <!-- Error / not found -->
   <div class="error-card" id="error-card">
     <p>⚠️</p>
     <p>Pass not found</p>
     <p id="error-msg">No permit found for this QR code. Please contact the TCM team.</p>
   </div>
 
+  <!-- Debug box — shows raw response to help troubleshoot -->
+  <div class="debug-box" id="debug-box"></div>
+
   <script>
     // ============================================================
-    // CONFIGURATION — paste your Power Automate flow URL here
+    // CONFIGURATION — your Power Automate flow URL
     // ============================================================
     const FLOW_URL = 'https://502171f7522dec7aa1e0d2b9ebcbbd.86.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1786af07e1c94747b1ba8bec15e19cf0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4fS9b4lpcIg4he05nIjv_X7vjiOBs8u-VASjK4Yx0N8';
     // ============================================================
@@ -484,6 +253,7 @@
     function formatDate(dateStr) {
       if (!dateStr) return '—';
       const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
       return d.toLocaleDateString('en-MY', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 
@@ -493,8 +263,14 @@
     }
 
     function maskNric(nric) {
-      if (!nric || nric.length < 4) return nric;
+      if (!nric || nric.length < 4) return nric || '—';
       return nric.slice(0, -4).replace(/\d/g, '*') + nric.slice(-4);
+    }
+
+    function showDebug(msg) {
+      const box = document.getElementById('debug-box');
+      box.style.display = 'block';
+      box.innerHTML = '<strong>Debug info:</strong><br>' + msg;
     }
 
     function showError(msg) {
@@ -544,24 +320,34 @@
         return;
       }
 
-      if (FLOW_URL === 'https://502171f7522dec7aa1e0d2b9ebcbbd.86.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1786af07e1c94747b1ba8bec15e19cf0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4fS9b4lpcIg4he05nIjv_X7vjiOBs8u-VASjK4Yx0N8') {
-        showError('Flow URL not configured. Please paste your Power Automate URL into index.html.');
-        return;
-      }
-
       try {
         const response = await fetch(FLOW_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ permitId })
+          body: JSON.stringify({ permitId: permitId })
         });
+
+        // Capture raw response text first for debugging
+        const rawText = await response.text();
 
         if (!response.ok) {
           showError('Could not retrieve pass details. Please try again or contact the TCM team.');
+          showDebug('HTTP status: ' + response.status + '<br>Response: ' + rawText.substring(0, 300));
           return;
         }
 
-        const data = await response.json();
+        // Try to parse as JSON
+        let data;
+        try {
+          data = JSON.parse(rawText);
+        } catch (e) {
+          showError('Unexpected response from server. Please contact the TCM team.');
+          showDebug('Could not parse JSON.<br>Raw response: ' + rawText.substring(0, 500));
+          return;
+        }
+
+        // Show raw data in debug so we can verify field names
+        showDebug('Raw data received: ' + JSON.stringify(data, null, 2).substring(0, 600));
 
         if (!data.permitId) {
           showError('No permit found for this QR code. Please contact the TCM team.');
@@ -569,20 +355,16 @@
         }
 
         // Check approval status
-        const approval = (data.overallApproval || '').toLowerCase();
+        const approval = (data.overallApproval || '').toLowerCase().trim();
         if (approval === 'rejected' || approval === 'revoked') {
           showDenied('This permit has been ' + data.overallApproval);
-          return;
-        }
-        if (approval !== 'approved' && approval !== '') {
-          showDenied('This permit is pending approval — status: ' + (data.overallApproval || 'Unknown'));
           return;
         }
 
         // Check expiry
         if (data.projectEnd) {
           const expiry = new Date(data.projectEnd);
-          if (expiry < new Date()) {
+          if (!isNaN(expiry) && expiry < new Date()) {
             showDenied('This permit expired on ' + formatDate(data.projectEnd));
             return;
           }
@@ -592,6 +374,7 @@
 
       } catch (err) {
         showError('Connection error. Please check your internet and try again.');
+        showDebug('Error: ' + err.message);
       }
     }
 
